@@ -37,17 +37,22 @@ function getSubmissions(url){
 				subreddit: entry.data.subreddit,
 			};
 		}
-		putSubmissionsIntoUI(submissions);
+		putSubmissionsIntoUI(url, submissions);
 	});
 }
 
-function putSubmissionsIntoUI(submissions){
+function putSubmissionsIntoUI(current_page, submissions){
 	if(submissions.length === 0){
-		$("#data").append("<span id='title'>"+"[title]"+"</span>&nbsp;&nbsp;&nbsp;");
-		$("#data").append(
-		"<span><a title='Post to reddit'"+
-		" target='_blank' href='" + "[submit url]" +
-		"'>Repost</a></span>");
+		$("#links").append("<div>This page hasn't been submitted to reddit, yet.</div>");
+		var element = $(
+			"<div class='submitbutton'>" +
+				"Create submission" +
+			"</div>"
+			);
+		element.click(function(){
+			openLinkInNewTab("http://www.reddit.com/submit?url=" + encodeURIComponent(current_page));
+		});
+		$("#links").append(element);
 	}
 	else{
 		$.each(submissions, function(index, submission) {
