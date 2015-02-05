@@ -98,31 +98,51 @@ function putSubmissionsIntoUI(submissions){
 	}
 	else{
 		$.each(submissions, function(index, submission) {
-			var element = $(
-				"<div class='submission'>" +
-					"<div class='score' align='center'>" +
-						submission.score +
-					"</div>" +
-					"<div class='title'>" +
-						submission.title +
-					"</div>" +
-					"<div>" +
-						"<div class='subreddit'>" +
-							"/r/" + submission.subreddit +
-						"</div>" +
-						"<div class='comment'>" +
-							submission.comments + " comments" +
-						"</div>" +
-						"<div class='time'>" +
-							Math.round(submission.age) + " days ago" +
-						"</div>" +
-					"</div>" +
-				"</div>"
-				);
-			element.click(function(){
+			var t_score = document.createTextNode(submission.score);
+			var t_title = document.createTextNode(submission.title);
+			var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
+			var t_comments = document.createTextNode(submission.comments + " comments");
+			var t_time = document.createTextNode(Math.round(submission.age) + " days ago");
+		
+			var e_submission = document.createElement("div");
+			e_submission.setAttribute("class", "submission");
+			
+			var e_score = document.createElement("div");
+			e_score.setAttribute("class", "score");
+			e_score.setAttribute("align", "center");
+			e_score.appendChild(t_score);
+			
+			var e_title = document.createElement("div");
+			e_title.setAttribute("class", "title");
+			e_title.appendChild(t_title);
+			
+			var e_infocontainer = document.createElement("div");
+			
+			var e_subreddit = document.createElement("div");
+			e_subreddit.setAttribute("class", "subreddit");
+			e_subreddit.appendChild(t_subreddit);
+			
+			var e_comments = document.createElement("div");
+			e_comments.setAttribute("class", "comment");
+			e_comments.appendChild(t_comments);
+			
+			var e_time = document.createElement("div");
+			e_time.setAttribute("class", "time");
+			e_time.appendChild(t_time);
+			
+			e_infocontainer.appendChild(e_subreddit);
+			e_infocontainer.appendChild(e_comments);
+			e_infocontainer.appendChild(e_time);
+			
+			e_submission.appendChild(e_score);
+			e_submission.appendChild(e_title);
+			e_submission.appendChild(e_infocontainer);
+			
+			e_submission.onclick = function() { 
 				openLinkInNewTab(submission.link);
-			});
-			$("#links").append(element);
+			};
+			
+			$("#links").get(0).appendChild(e_submission);
 		});
 	}
 }
