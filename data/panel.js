@@ -64,7 +64,7 @@ function handleResponse(jsonData){
 			link: "http://reddit.com" + entry.data.permalink,
 			title: entry.data.title,
 			score: entry.data.score+"",
-			age: (now_timestamp - submission_timestamp) / (24 * 60 * 60 * 1000), // 24 * 60 * 60 * 1000 = milliseconds of 1 day
+			age: (now_timestamp - submission_timestamp),
 			comments: entry.data.num_comments+"",
 			subreddit: entry.data.subreddit,
 		};
@@ -97,7 +97,7 @@ function putSubmissionsIntoUI(submissions){
 			var t_title = document.createTextNode(submission.title);
 			var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
 			var t_comments = document.createTextNode(submission.comments + " comments");
-			var t_time = document.createTextNode(Math.round(submission.age) + " days ago");
+			var t_time = document.createTextNode(formatAge(submission.age));
 		
 			var e_submission = document.createElement("div");
 			e_submission.setAttribute("class", "submission");
@@ -139,6 +139,30 @@ function putSubmissionsIntoUI(submissions){
 			
 			$("#links").get(0).appendChild(e_submission);
 		});
+	}
+}
+
+function formatAge(age){
+	var MINUTE = 60 * 1000;
+	var HOUR = MINUTE * 60;
+	var DAY = HOUR * 24;
+	var WEEK = DAY * 7;
+	var YEAR = WEEK * 52;
+	var MONTH = YEAR / 12;
+	if (age < MINUTE) {
+		return age + " seconds ago";
+	} else if(age < HOUR) {
+		return Math.floor(age / MINUTE) + " minutes ago";
+	} else if(age < DAY) {
+		return Math.floor(age / HOUR) + " hours ago";
+	} else if(age < WEEK) {
+		return Math.floor(age / DAY) + " days ago";
+	} else if(age < MONTH) {
+		return Math.floor(age / WEEK) + " weeks ago";
+	} else if(age < YEAR) {
+		return Math.floor(age / MONTH) + " months ago";
+	} else {
+		return Math.floor(age / YEAR) + " years ago";
 	}
 }
 
