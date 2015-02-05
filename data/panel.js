@@ -52,12 +52,25 @@ function putSubmissionsIntoUI(submissions){
 	else{
 		$.each(submissions, function(index, submission) {
 			var element = $(
-				"<div> "+ 
-					submission.score + " | " + submission.title + "</a>" + 
-					"<br>"+
-					"To /r/" + submission.subreddit + ", " + submission.age + " days ago - " + submission.comments + " comments" + 
-				"</div>" + 
-				"<br>"
+				"<div class='submission'>" +
+					"<div class='score' align='center'>" +
+						submission.score +
+					"</div>" +
+					"<div class='title'>" +
+						submission.title +
+					"</div>" +
+					"<div>" +
+						"<div class='subreddit'>" +
+							"/r/" + submission.subreddit +
+						"</div>" +
+						"<div class='comment'>" +
+							submission.comments + " comments" +
+						"</div>" +
+						"<div class='time'>" +
+							Math.round(submission.age) + " days ago" +
+						"</div>" +
+					"</div>" +
+				"</div>"
 				);
 			element.click(function(){
 				openLinkInNewTab(submission.link);

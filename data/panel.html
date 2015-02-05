@@ -1,14 +1,74 @@
 <!doctype html>
 <html>
-<head>
-</head>
-<body>
-<div id="data">
-</div>
-<div id="links">
-</div>
-<div align="center">
-<img src="loading.gif" height="20" width="20" id="loading" style="margin-top:50px">
-</div>
-</body>
+	<head>
+	</head>
+	<style>
+		@import url('http://fonts.googleapis.com/css?family=Open+Sans');
+		.submission {
+			width: calc(100% - 14px);
+			padding: 10px 10px 5px 10px;
+			margin-top: 1px;
+			border: 1px solid grey;
+			border-radius: 5px;
+			font-size: 100% !important;
+			overflow: hidden;
+		}
+		.submission:hover {
+			background-color: lightgrey;
+		}
+		.score {
+			width: 50px;
+			float:left;
+			background-color: #CFDBC5;
+			border-radius: 3px;
+		}
+		.subreddit {
+			margin-left: auto;
+			margin-right: auto;
+			width: calc(50% - 14px);
+			font-size: 80% !important;
+			float: left;
+			overflow: hidden;
+		}
+		.comment {
+			margin-left: auto;
+			margin-right: auto;
+			width: 25%;
+			font-size: 80% !important;
+			float: left;
+			overflow: hidden;
+		}
+		.time {
+			margin-left: auto;
+			margin-right: auto;
+			width: 25%;
+			text-align: right !important;
+			font-size: 80% !important;
+			float: left;
+			overflow: hidden;
+		}
+		.title {
+			margin-left: 55px;
+			font-weight: bold;
+			overflow: hidden;
+		}
+		html *
+		{
+		   font-size: 1em !important;
+		   color: #000 !important;
+		   font-family: 'Open Sans' !important;
+		}
+	</style>
+	<body style="overflow-y: scroll">
+		<div>
+			<div id="data">
+			</div>
+			<div id="links" style="cursor: pointer">
+				
+			</div>
+			<div align="center">
+				<img src="loading.gif" height="20" width="20" id="loading" style="margin-top:50px">
+			</div>
+		</div>
+	</body>
 </html>
