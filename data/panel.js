@@ -24,9 +24,7 @@ function reset(){
 }
 
 function getAllSubmissions(url){
-	console.log('Submissions for ' + url);
 	var reddit_urls = getAllURLVersions(url);
-	console.log(reddit_urls);
 	responses_expected = reddit_urls.length;
 	
 	$.each(reddit_urls, function(index, reddit_url) {
@@ -61,7 +59,6 @@ function handleResponse(jsonData){
 	var now_timestamp = now.getTime();// = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
 	var submissions = [];
 	for(var i=0; entry = jsonData.data.children[i]; i++) {
-		console.log(entry.data.score + " | " + entry.data.title)
 		submission_timestamp = entry.data.created_utc*1000;
 		submissions[i] = {
 			link: "http://reddit.com" + entry.data.permalink,
@@ -72,13 +69,11 @@ function handleResponse(jsonData){
 			subreddit: entry.data.subreddit,
 		};
 	}
-	console.log('submissions found: ' + submissions.length);
 	total_submission_list.push.apply(total_submission_list, submissions);
 	
 	response_counter++;
 	if(response_counter === responses_expected){
 		$("img#loading").hide(0);
-		console.log('total submissions found: ' + total_submission_list.length);
 		putSubmissionsIntoUI(total_submission_list);
 	}
 }
