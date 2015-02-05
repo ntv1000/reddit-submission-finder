@@ -80,16 +80,24 @@ function handleResponse(jsonData){
 
 function putSubmissionsIntoUI(submissions){
 	if(submissions.length === 0){
-		$("#links").append("<div>This page hasn't been submitted to reddit, yet.</div>");
-		var element = $(
-			"<div class='submitbutton'>" +
-				"Create submission" +
-			"</div>"
-			);
-		element.click(function(){
+		var t_nonefound = document.createTextNode("This page hasn't been submitted to reddit, yet.");
+		var t_submit = document.createTextNode("Create submission");
+		
+		var e_nonefound = document.createElement("div");
+		e_nonefound.setAttribute("align", "center");
+		e_nonefound.setAttribute("style", "font-size: 140% !important");
+		e_nonefound.appendChild(t_nonefound);
+		
+		var e_submit = document.createElement("div");
+		e_submit.setAttribute("class", "submitbutton");
+		e_submit.appendChild(t_submit);
+		
+		e_submit.onclick = function() { 
 			openLinkInNewTab("http://www.reddit.com/submit?url=" + encodeURIComponent(current_page));
-		});
-		$("#links").append(element);
+		};
+		
+		document.getElementById("links").appendChild(e_nonefound);
+		document.getElementById("links").appendChild(e_submit);
 	}
 	else{
 		$.each(submissions, function(index, submission) {
@@ -137,7 +145,7 @@ function putSubmissionsIntoUI(submissions){
 				openLinkInNewTab(submission.link);
 			};
 			
-			$("#links").get(0).appendChild(e_submission);
+			document.getElementById("links").appendChild(e_submission);
 		});
 	}
 }
