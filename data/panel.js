@@ -10,9 +10,10 @@ self.port.on("show", function onShow(url) {
 });
 
 self.port.on("hide", function onHide() {
-	$.each($("#links").children(), function(index, child) {
-		child.remove();
-	});
+	var e_links = document.getElementById("links");
+	while (e_links.firstChild) {
+		e_links.removeChild(e_links.firstChild);
+	}
 });
 
 function reset(){
@@ -20,16 +21,16 @@ function reset(){
 	responses_expected = 0;
 	response_counter = 0;
 	total_submission_list = [];
-	$("img#loading").show(0);
+	document.getElementById("loading").style.display = "block";
 }
 
 function getAllSubmissions(url){
 	var reddit_urls = getAllURLVersions(url);
 	responses_expected = reddit_urls.length;
 	
-	$.each(reddit_urls, function(index, reddit_url) {
-		$.getJSON(reddit_url, handleResponse);
-	});
+	for(var i=0; reddit_url = reddit_urls[i]; i++) {
+		getJSON(reddit_url, handleResponse);
+	}
 }
 
 function getAllURLVersions(url){
@@ -73,7 +74,7 @@ function handleResponse(jsonData){
 	
 	response_counter++;
 	if(response_counter === responses_expected){
-		$("img#loading").hide(0);
+		document.getElementById("loading").style.display = "none";
 		putSubmissionsIntoUI(total_submission_list);
 	}
 }
@@ -100,7 +101,7 @@ function putSubmissionsIntoUI(submissions){
 		document.getElementById("links").appendChild(e_submit);
 	}
 	else{
-		$.each(submissions, function(index, submission) {
+		for(var i=0; submission = submissions[i]; i++) {
 			var t_score = document.createTextNode(submission.score);
 			var t_title = document.createTextNode(submission.title);
 			var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
@@ -146,7 +147,7 @@ function putSubmissionsIntoUI(submissions){
 			};
 			
 			document.getElementById("links").appendChild(e_submission);
-		});
+		}
 	}
 }
 
@@ -178,6 +179,21 @@ function openLinkInNewTab(url){
 	self.port.emit("open-link", url);
 }
 
+function getJSON(path, success)
+{
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function()
+    {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                if (success)
+                    success(JSON.parse(xhr.responseText));
+            }
+        }
+    };
+    xhr.open("GET", path, true);
+    xhr.send();
+}
 
 
 
