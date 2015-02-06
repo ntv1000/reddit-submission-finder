@@ -94,7 +94,7 @@ function putSubmissionsIntoUI(submissions){
 		e_submit.appendChild(t_submit);
 		
 		e_submit.onclick = function() { 
-			openLinkInNewTab("http://www.reddit.com/submit?url=" + encodeURIComponent(current_page));
+			openLink("http://www.reddit.com/submit?url=" + encodeURIComponent(current_page));
 		};
 		
 		document.getElementById("links").appendChild(e_nonefound);
@@ -144,7 +144,7 @@ function putSubmissionsIntoUI(submissions){
 			
 			var s = submission
 			e_submission.onclick = function() { 
-				openLinkInNewTab(s.link);
+				openLink(s.link);
 			};
 			
 			document.getElementById("links").appendChild(e_submission);
@@ -176,7 +176,7 @@ function formatAge(age){
 	}
 }
 
-function openLinkInNewTab(url){
+function openLink(url){
 	self.port.emit("open-link", url);
 }
 
