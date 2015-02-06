@@ -142,8 +142,9 @@ function putSubmissionsIntoUI(submissions){
 			e_submission.appendChild(e_title);
 			e_submission.appendChild(e_infocontainer);
 			
+			var s = submission
 			e_submission.onclick = function() { 
-				openLinkInNewTab(submission.link);
+				openLinkInNewTab(s.link);
 			};
 			
 			document.getElementById("links").appendChild(e_submission);
