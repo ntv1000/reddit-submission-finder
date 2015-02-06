@@ -5,7 +5,7 @@
   "description": "Extension to find previous reddit submissions of the current page",
   "author": "ntv1000",
   "license": "MPL 2.0",
-  "version": "0.5",
+  "version": "0.6",
   
   "preferences": [{
         "name": "openInNewTab",
