@@ -39,17 +39,17 @@ function getAllURLVersions(url){
 	if (url.indexOf('https') === 0) {
 		without_http = url.substring(5);
 		result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-		result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http://" + without_http));
+		result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http" + without_http));
 	}
 	else{
 		if (url.indexOf('http') === 0) {
 			without_http = url.substring(4);
 			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https" + without_http));
 		}
 		else{
-			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http://" + without_http));
-			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http" + without_http));
+			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https" + without_http));
 		}
 	}
 	return result;
