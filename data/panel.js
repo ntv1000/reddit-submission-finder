@@ -159,10 +159,11 @@ function putSubmissionsIntoUI(submissions){
 			e_submission.appendChild(e_title);
 			e_submission.appendChild(e_infocontainer);
 			
-			var s = submission
-			e_submission.onclick = function() { 
-				openLink(s.link);
-			};
+			e_submission.onclick = function(submission_link) { 
+				return function(){
+					openLink(submission_link);
+				}
+			}(submission.link);
 			
 			document.getElementById("links").appendChild(e_submission);
 		}
