@@ -27,7 +27,6 @@ function reset(){
 function getAllSubmissions(url){
 	var reddit_urls = getAllURLVersions(url);
 	responses_expected = reddit_urls.length;
-	
 	for(var i=0; reddit_url = reddit_urls[i]; i++) {
 		getJSON(reddit_url, handleResponse);
 	}
@@ -51,21 +50,26 @@ function getAllURLVersions(url){
 		result.push('http://api.reddit.com/search.json?q=' + encodeURIComponent('(url:' + youtubeID + ') (site:youtube.com OR site:youtu.be)'))
 	} else {
 		var without_http = "";
+		if(url.slice(-1) === "/") {
+			url = url.substring(0, url.length - 1);
+		}
 		result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url));
+		result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url + "/"));
 		if (url.indexOf('https') === 0) {
-			without_http = url.substring(5);
+			without_http = url.substring(8);
 			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http" + without_http));
+			result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http + "/"));
 		}
 		else{
 			if (url.indexOf('http') === 0) {
-				without_http = url.substring(4);
-				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https" + without_http));
+				without_http = url.substring(7);
+				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
 			}
 			else{
-				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("http" + without_http));
-				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https" + without_http));
+				without_http = url;
+				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+				result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
 			}
 		}
 	}
