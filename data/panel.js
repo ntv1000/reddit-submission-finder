@@ -101,23 +101,13 @@ function handleResponse(jsonData) {
 function putSubmissionsIntoUI(submissions) {
     if (submissions.length === 0) {
         var t_nonefound = document.createTextNode("This page hasn't been submitted to reddit, yet.");
-        var t_submit = document.createTextNode("Create submission");
 
         var e_nonefound = document.createElement("div");
         e_nonefound.setAttribute("align", "center");
         e_nonefound.setAttribute("style", "font-size: 140% !important");
         e_nonefound.appendChild(t_nonefound);
 
-        var e_submit = document.createElement("div");
-        e_submit.setAttribute("class", "submitbutton");
-        e_submit.appendChild(t_submit);
-
-        e_submit.onclick = function () {
-            openLink("http://www.reddit.com/submit?url=" + encodeURIComponent(current_page));
-        };
-
         document.getElementById("links").appendChild(e_nonefound);
-        document.getElementById("links").appendChild(e_submit);
     } else {
         for (var i = 0; submission = submissions[i]; i++) {
             var t_score = document.createTextNode(submission.score);
@@ -169,7 +159,15 @@ function putSubmissionsIntoUI(submissions) {
             document.getElementById("links").appendChild(e_submission);
         }
     }
-    console.timeEnd("all");
+    var t_submit = document.createTextNode("Create submission");
+    var e_submit = document.createElement("div");
+    e_submit.setAttribute("class", "submitbutton");
+    e_submit.appendChild(t_submit);
+
+    e_submit.onclick = function () {
+        openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page));
+    };
+    document.getElementById("links").appendChild(e_submit);
 }
 
 function formatAge(age) {
