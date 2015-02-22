@@ -2,11 +2,14 @@ var current_page;
 var responses_expected = 0;
 var response_counter = 0;
 var total_submission_list = [];
+var modhash = "";
 
-self.port.on("show", function onShow(url) {
+self.port.on("show", function onShow(init_data) {
     reset();
-    current_page = url;
-    getAllSubmissions(url);
+    current_page = init_data.url;
+    //current_page = "http://www.reddit.com";
+    modhash = init_data.modhash;
+    getAllSubmissions(current_page);
 });
 
 self.port.on("hide", function onHide() {
@@ -18,6 +21,7 @@ self.port.on("hide", function onHide() {
 
 function reset() {
     current_page = "";
+    modhash = "";
     responses_expected = 0;
     response_counter = 0;
     total_submission_list = [];
@@ -81,12 +85,14 @@ function handleResponse(jsonData) {
     for (var i = 0; entry = jsonData.data.children[i]; i++) {
         submission_timestamp = entry.data.created_utc * 1000;
         submissions[i] = {
+            fullname: entry.data.name,
             link: "http://reddit.com" + entry.data.permalink,
             title: entry.data.title,
             score: entry.data.score + "",
             age: (now_timestamp - submission_timestamp),
             comments: entry.data.num_comments + "",
             subreddit: entry.data.subreddit,
+            likes: entry.data.likes,
         };
     }
     total_submission_list.push.apply(total_submission_list, submissions);
@@ -110,6 +116,7 @@ function putSubmissionsIntoUI(submissions) {
         document.getElementById("links").appendChild(e_nonefound);
     } else {
         for (var i = 0; submission = submissions[i]; i++) {
+
             var t_score = document.createTextNode(submission.score);
             var t_title = document.createTextNode(submission.title);
             var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
@@ -119,44 +126,118 @@ function putSubmissionsIntoUI(submissions) {
             var e_submission = document.createElement("div");
             e_submission.setAttribute("class", "submission");
 
+            var e_scorecontainer = document.createElement("div");
+            e_scorecontainer.setAttribute("class", "scorecontainer");
+            e_scorecontainer.setAttribute("align", "center");
+            e_submission.appendChild(e_scorecontainer);
+
+            var e_rightpanel = document.createElement("div");
+            e_rightpanel.setAttribute("class", "rightpanel");
+            e_submission.appendChild(e_rightpanel);
+
+            var e_upvote = document.createElement("div");
+            e_upvote.setAttribute("class", "upvote");
+            e_upvote.setAttribute("id", "upvote");
+            e_scorecontainer.appendChild(e_upvote);
+            if (submission.likes === true) {
+                e_upvote.style.borderColor = "transparent transparent #ff8b60 transparent";
+            }
             var e_score = document.createElement("div");
             e_score.setAttribute("class", "score");
-            e_score.setAttribute("align", "center");
             e_score.appendChild(t_score);
+            e_scorecontainer.appendChild(e_score);
+
+            var e_downvote = document.createElement("div");
+            e_downvote.setAttribute("class", "downvote");
+            e_downvote.setAttribute("id", "downvote");
+            e_scorecontainer.appendChild(e_downvote);
+            if (submission.likes === false) {
+                e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
+            }
 
             var e_title = document.createElement("div");
             e_title.setAttribute("class", "title");
             e_title.appendChild(t_title);
-
-            var e_infocontainer = document.createElement("div");
+            e_rightpanel.appendChild(e_title);
 
             var e_subreddit = document.createElement("div");
             e_subreddit.setAttribute("class", "subreddit");
             e_subreddit.appendChild(t_subreddit);
+            e_rightpanel.appendChild(e_subreddit);
 
             var e_comments = document.createElement("div");
             e_comments.setAttribute("class", "comment");
             e_comments.appendChild(t_comments);
+            e_rightpanel.appendChild(e_comments);
 
             var e_time = document.createElement("div");
             e_time.setAttribute("class", "time");
             e_time.appendChild(t_time);
+            e_rightpanel.appendChild(e_time);
 
-            e_infocontainer.appendChild(e_subreddit);
-            e_infocontainer.appendChild(e_comments);
-            e_infocontainer.appendChild(e_time);
-
-            e_submission.appendChild(e_score);
-            e_submission.appendChild(e_title);
-            e_submission.appendChild(e_infocontainer);
 
             e_submission.onclick = function (submission_link) {
-                return function () {
+                return function (event) {
                     openLink(submission_link);
                 }
             }(submission.link);
-
             document.getElementById("links").appendChild(e_submission);
+
+            e_upvote.onclick = function (submission_fullname, t_score) {
+                return function (event) {
+                    var submission = total_submission_list.find(function (e, i, a) {
+                        if (e.fullname === submission_fullname) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (submission.likes === true) {
+                        castVote(submission_fullname, 0);
+                        t_score.textContent = parseInt(t_score.textContent) - 1;
+                        // -1
+                        submission.likes = null;
+                    } else {
+                        castVote(submission_fullname, 1);
+                        if (submission.likes === null) {
+                            t_score.textContent = parseInt(t_score.textContent) + 1;
+                            // +1
+                        } else {
+                            t_score.textContent = parseInt(t_score.textContent) + 2;
+                            // + 2
+                        }
+                        submission.likes = true;
+                    }
+                    event.stopPropagation();
+                }
+            }(submission.fullname, t_score);
+
+            e_downvote.onclick = function (submission_fullname, t_score) {
+                return function (event) {
+                    var submission = total_submission_list.find(function (e, i, a) {
+                        if (e.fullname === submission_fullname) {
+                            return true;
+                        }
+                        return false;
+                    });
+                    if (submission.likes === false) {
+                        castVote(submission_fullname, 0);
+                        t_score.textContent = parseInt(t_score.textContent) + 1;
+                        // +1
+                        submission.likes = null;
+                    } else {
+                        castVote(submission_fullname, -1);
+                        if (submission.likes === null) {
+                            t_score.textContent = parseInt(t_score.textContent) - 1;
+                            // -1
+                        } else {
+                            t_score.textContent = parseInt(t_score.textContent) - 2;
+                            // - 2
+                        }
+                        submission.likes = false;
+                    }
+                    event.stopPropagation();
+                }
+            }(submission.fullname, t_score);
         }
     }
     var t_submit = document.createTextNode("Create submission");
@@ -210,4 +291,25 @@ function getJSON(path, success) {
     };
     xhr.open("GET", path, true);
     xhr.send();
+}
+
+function castVote(fullname, direction) {
+    var url = "http://www.reddit.com/api/vote?dir=" + direction + "&id=" + fullname;
+
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("X-Modhash", modhash);
+    xhr.send();
+
+    // update UI accordingly
+    if (direction === 1) {
+        document.getElementById("upvote").style.borderColor = "transparent transparent #ff8b60 transparent";
+        document.getElementById("downvote").style.borderColor = "#c6c6c6 transparent transparent transparent";
+    } else if (direction === 0) {
+        document.getElementById("upvote").style.borderColor = "transparent transparent #c6c6c6 transparent";
+        document.getElementById("downvote").style.borderColor = "#c6c6c6 transparent transparent transparent";
+    } else if (direction === -1) {
+        document.getElementById("upvote").style.borderColor = "transparent transparent #c6c6c6 transparent";
+        document.getElementById("downvote").style.borderColor = "#9494ff transparent transparent transparent";
+    }
 }
