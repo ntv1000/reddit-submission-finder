@@ -149,7 +149,7 @@ function putSubmissionsIntoUI(submissions) {
             if (modhash !== "") {
                 var e_upvote = document.createElement("div");
                 e_upvote.setAttribute("class", "upvote");
-                e_upvote.setAttribute("id", "upvote");
+                e_upvote.setAttribute("id", "upvote" + submission.fullname);
                 e_scorecontainer.appendChild(e_upvote);
                 if (submission.likes === true) {
                     e_upvote.style.borderColor = "transparent transparent #ff8b60 transparent";
@@ -163,7 +163,7 @@ function putSubmissionsIntoUI(submissions) {
             if (modhash !== "") {
                 var e_downvote = document.createElement("div");
                 e_downvote.setAttribute("class", "downvote");
-                e_downvote.setAttribute("id", "downvote");
+                e_downvote.setAttribute("id", "downvote" + submission.fullname);
                 e_scorecontainer.appendChild(e_downvote);
                 if (submission.likes === false) {
                     e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
@@ -320,13 +320,13 @@ function castVote(fullname, direction) {
 
     // update UI accordingly
     if (direction === 1) {
-        document.getElementById("upvote").style.borderColor = "transparent transparent #ff8b60 transparent";
-        document.getElementById("downvote").style.borderColor = "#c6c6c6 transparent transparent transparent";
+        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #ff8b60 transparent";
+        document.getElementById("downvote" + fullname).style.borderColor = "#c6c6c6 transparent transparent transparent";
     } else if (direction === 0) {
-        document.getElementById("upvote").style.borderColor = "transparent transparent #c6c6c6 transparent";
-        document.getElementById("downvote").style.borderColor = "#c6c6c6 transparent transparent transparent";
+        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #c6c6c6 transparent";
+        document.getElementById("downvote" + fullname).style.borderColor = "#c6c6c6 transparent transparent transparent";
     } else if (direction === -1) {
-        document.getElementById("upvote").style.borderColor = "transparent transparent #c6c6c6 transparent";
-        document.getElementById("downvote").style.borderColor = "#9494ff transparent transparent transparent";
+        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #c6c6c6 transparent";
+        document.getElementById("downvote" + fullname).style.borderColor = "#9494ff transparent transparent transparent";
     }
 }
