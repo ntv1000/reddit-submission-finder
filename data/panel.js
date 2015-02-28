@@ -115,6 +115,16 @@ function putSubmissionsIntoUI(submissions) {
 
         document.getElementById("links").appendChild(e_nonefound);
     } else {
+        if (modhash === "") {
+            var t_notloggedin = document.createTextNode("Login on reddit to vote on submissions");
+
+            var e_notloggedin = document.createElement("div");
+            e_notloggedin.setAttribute("align", "center");
+            e_notloggedin.setAttribute("style", "font-size: 100% !important");
+            e_notloggedin.appendChild(t_notloggedin);
+
+            document.getElementById("links").appendChild(e_notloggedin);
+        }
         for (var i = 0; submission = submissions[i]; i++) {
 
             var t_score = document.createTextNode(submission.score);
@@ -135,24 +145,29 @@ function putSubmissionsIntoUI(submissions) {
             e_rightpanel.setAttribute("class", "rightpanel");
             e_submission.appendChild(e_rightpanel);
 
-            var e_upvote = document.createElement("div");
-            e_upvote.setAttribute("class", "upvote");
-            e_upvote.setAttribute("id", "upvote");
-            e_scorecontainer.appendChild(e_upvote);
-            if (submission.likes === true) {
-                e_upvote.style.borderColor = "transparent transparent #ff8b60 transparent";
+
+            if (modhash !== "") {
+                var e_upvote = document.createElement("div");
+                e_upvote.setAttribute("class", "upvote");
+                e_upvote.setAttribute("id", "upvote");
+                e_scorecontainer.appendChild(e_upvote);
+                if (submission.likes === true) {
+                    e_upvote.style.borderColor = "transparent transparent #ff8b60 transparent";
+                }
             }
             var e_score = document.createElement("div");
             e_score.setAttribute("class", "score");
             e_score.appendChild(t_score);
             e_scorecontainer.appendChild(e_score);
 
-            var e_downvote = document.createElement("div");
-            e_downvote.setAttribute("class", "downvote");
-            e_downvote.setAttribute("id", "downvote");
-            e_scorecontainer.appendChild(e_downvote);
-            if (submission.likes === false) {
-                e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
+            if (modhash !== "") {
+                var e_downvote = document.createElement("div");
+                e_downvote.setAttribute("class", "downvote");
+                e_downvote.setAttribute("id", "downvote");
+                e_scorecontainer.appendChild(e_downvote);
+                if (submission.likes === false) {
+                    e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
+                }
             }
 
             var e_title = document.createElement("div");
@@ -183,61 +198,63 @@ function putSubmissionsIntoUI(submissions) {
             }(submission.link);
             document.getElementById("links").appendChild(e_submission);
 
-            e_upvote.onclick = function (submission_fullname, t_score) {
-                return function (event) {
-                    var submission = total_submission_list.find(function (e, i, a) {
-                        if (e.fullname === submission_fullname) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (submission.likes === true) {
-                        castVote(submission_fullname, 0);
-                        t_score.textContent = parseInt(t_score.textContent) - 1;
-                        // -1
-                        submission.likes = null;
-                    } else {
-                        castVote(submission_fullname, 1);
-                        if (submission.likes === null) {
-                            t_score.textContent = parseInt(t_score.textContent) + 1;
-                            // +1
-                        } else {
-                            t_score.textContent = parseInt(t_score.textContent) + 2;
-                            // + 2
-                        }
-                        submission.likes = true;
-                    }
-                    event.stopPropagation();
-                }
-            }(submission.fullname, t_score);
-
-            e_downvote.onclick = function (submission_fullname, t_score) {
-                return function (event) {
-                    var submission = total_submission_list.find(function (e, i, a) {
-                        if (e.fullname === submission_fullname) {
-                            return true;
-                        }
-                        return false;
-                    });
-                    if (submission.likes === false) {
-                        castVote(submission_fullname, 0);
-                        t_score.textContent = parseInt(t_score.textContent) + 1;
-                        // +1
-                        submission.likes = null;
-                    } else {
-                        castVote(submission_fullname, -1);
-                        if (submission.likes === null) {
+            if (modhash !== "") {
+                e_upvote.onclick = function (submission_fullname, t_score) {
+                    return function (event) {
+                        var submission = total_submission_list.find(function (e, i, a) {
+                            if (e.fullname === submission_fullname) {
+                                return true;
+                            }
+                            return false;
+                        });
+                        if (submission.likes === true) {
+                            castVote(submission_fullname, 0);
                             t_score.textContent = parseInt(t_score.textContent) - 1;
                             // -1
+                            submission.likes = null;
                         } else {
-                            t_score.textContent = parseInt(t_score.textContent) - 2;
-                            // - 2
+                            castVote(submission_fullname, 1);
+                            if (submission.likes === null) {
+                                t_score.textContent = parseInt(t_score.textContent) + 1;
+                                // +1
+                            } else {
+                                t_score.textContent = parseInt(t_score.textContent) + 2;
+                                // + 2
+                            }
+                            submission.likes = true;
                         }
-                        submission.likes = false;
+                        event.stopPropagation();
                     }
-                    event.stopPropagation();
-                }
-            }(submission.fullname, t_score);
+                }(submission.fullname, t_score);
+
+                e_downvote.onclick = function (submission_fullname, t_score) {
+                    return function (event) {
+                        var submission = total_submission_list.find(function (e, i, a) {
+                            if (e.fullname === submission_fullname) {
+                                return true;
+                            }
+                            return false;
+                        });
+                        if (submission.likes === false) {
+                            castVote(submission_fullname, 0);
+                            t_score.textContent = parseInt(t_score.textContent) + 1;
+                            // +1
+                            submission.likes = null;
+                        } else {
+                            castVote(submission_fullname, -1);
+                            if (submission.likes === null) {
+                                t_score.textContent = parseInt(t_score.textContent) - 1;
+                                // -1
+                            } else {
+                                t_score.textContent = parseInt(t_score.textContent) - 2;
+                                // - 2
+                            }
+                            submission.likes = false;
+                        }
+                        event.stopPropagation();
+                    }
+                }(submission.fullname, t_score);
+            }
         }
     }
     var t_submit = document.createTextNode("Create submission");
