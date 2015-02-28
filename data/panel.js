@@ -191,7 +191,7 @@ function putSubmissionsIntoUI(submissions) {
             e_rightpanel.appendChild(e_time);
 
 
-            e_submission.onclick = function (submission_link) {
+            e_rightpanel.onclick = function (submission_link) {
                 return function (event) {
                     openLink(submission_link);
                 }

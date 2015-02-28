@@ -6,16 +6,10 @@
 <style>
     .submission {
         width: calc(100% - 14px);
-        padding: 3px 10px 5px 5px;
         margin-top: 1px;
         border: 1px solid grey;
         border-radius: 5px;
         font-size: 100% !important;
-        cursor: pointer
-    }
-    
-    .submission:hover {
-        background-color: #f8f8f8;
     }
     
     .score {
@@ -28,6 +22,7 @@
     
     .scorecontainer {
         width: 40px;
+        padding-left: 5px;
         margin-top: 3px;
         float: left;
     }
@@ -59,8 +54,18 @@
     }
     
     .rightpanel {
+        padding: 3px 10px 5px 5px;
+        border-radius: 0px 5px 5px 0px;
         overflow: hidden;
-        margin-left: 45px;
+        margin-left: 47px;
+        border-left-style: solid;
+        border-left-color: #d6d6d6;
+        border-left-width: 1px;
+        cursor: pointer
+    }
+    
+    .rightpanel:hover {
+        background-color: #f8f8f8;
     }
     
     .submitbutton {
@@ -88,6 +93,7 @@
         border-width: 0 8px 8px 8px;
         border-color: transparent transparent #c6c6c6 transparent;
         margin-bottom: 5px;
+        cursor: pointer
     }
     
     .downvote {
@@ -97,6 +103,7 @@
         border-width: 8px 8px 0px 8px;
         border-color: #c6c6c6 transparent transparent transparent;
         margin-top: 5px;
+        cursor: pointer
     }
 </style>
 
