@@ -6,9 +6,8 @@ Inspired by [Socialite](https://addons.mozilla.org/en-US/firefox/addon/socialite
 
 # Screenshot
 
-![](http://i.imgur.com/QY56Qs3.png)
+![](http://i.imgur.com/lXy3Y6o.png)
 
 
 # To-do
 * Sorting the list of found submissions
-* UI tweaks
