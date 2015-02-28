@@ -99,9 +99,23 @@ function handleResponse(jsonData) {
 
     response_counter++;
     if (response_counter === responses_expected) {
+        total_submission_list = distinctSubmissions(total_submission_list);
         document.getElementById("loading").style.display = "none";
         putSubmissionsIntoUI(total_submission_list);
     }
+}
+
+function distinctSubmissions(submission_list) {
+    var u = {},
+        a = [];
+    for (var i = 0, l = submission_list.length; i < l; ++i) {
+        if (u.hasOwnProperty(submission_list[i].fullname)) {
+            continue;
+        }
+        a.push(submission_list[i]);
+        u[submission_list[i].fullname] = 1;
+    }
+    return a;
 }
 
 function putSubmissionsIntoUI(submissions) {
