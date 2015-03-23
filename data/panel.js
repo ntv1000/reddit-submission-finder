@@ -51,6 +51,13 @@ function getAllURLVersions(url) {
             }
             return '';
         }();
+
+        // some youtube id's contain a dash at the start and reddit search interprets that as NOT
+        // workaround is to search without the dash in the id
+        if (youtubeID.indexOf('-') === 0) {
+            youtubeID = youtubeID.substring(1);
+        }
+
         result.push('http://api.reddit.com/search.json?q=' + encodeURIComponent('(url:' + youtubeID + ') (site:youtube.com OR site:youtu.be)'))
     } else {
         var without_http = "";
