@@ -11,3 +11,6 @@ Inspired by [Socialite](https://addons.mozilla.org/en-US/firefox/addon/socialite
 
 # To-do
 * Sorting the list of found submissions
+* Show error codes when request to reddit fails
+
+# Known bugs
