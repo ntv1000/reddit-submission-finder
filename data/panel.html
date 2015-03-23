@@ -61,11 +61,43 @@
         border-left-style: solid;
         border-left-color: #d6d6d6;
         border-left-width: 1px;
-        cursor: pointer
+        cursor: pointer;
+        position: relative;
     }
     
     .rightpanel:hover {
         background-color: #f8f8f8;
+    }
+    
+    div.newtab {
+        overflow: visible;
+        position: absolute;
+        right: 10px;
+        top: 8px;
+        height: 30px;
+        width: 30px;
+        border-radius: 2000px;
+        border-style: solid;
+        border-width: 1px;
+        border-color: grey;
+        background-color: white;
+        z-index: 100;
+        padding: 0px;
+        visibility: hidden;
+    }
+    
+    div.newtab:hover {
+        background-color: #d9d9d9;
+    }
+    
+    .rightpanel:hover > div.newtab {
+        visibility: visible;
+    }
+    
+    img.newtab {
+        width: 20px;
+        height: 20px;
+        margin: 5px;
     }
     
     .submitbutton {

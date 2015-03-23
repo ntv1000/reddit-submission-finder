@@ -7,7 +7,6 @@ var modhash = "";
 self.port.on("show", function onShow(init_data) {
     reset();
     current_page = init_data.url;
-    //current_page = "http://www.reddit.com";
     modhash = init_data.modhash;
     getAllSubmissions(current_page);
 });
@@ -191,6 +190,16 @@ function putSubmissionsIntoUI(submissions) {
                 }
             }
 
+            var e_openbackground = document.createElement("div");
+            e_openbackground.setAttribute("class", "newtab");
+            e_openbackground.setAttribute("title", "Open in background tab");
+            e_rightpanel.appendChild(e_openbackground);
+
+            var e_openbackground_image = document.createElement("img");
+            e_openbackground_image.setAttribute("class", "newtab");
+            e_openbackground_image.setAttribute("src", "./newtab.png");
+            e_openbackground.appendChild(e_openbackground_image);
+
             var e_title = document.createElement("div");
             e_title.setAttribute("class", "title");
             e_title.appendChild(t_title);
@@ -214,9 +223,17 @@ function putSubmissionsIntoUI(submissions) {
 
             e_rightpanel.onclick = function (submission_link) {
                 return function (event) {
-                    openLink(submission_link);
+                    openLink(submission_link, true);
                 }
             }(submission.link);
+
+            e_openbackground.onclick = function (submission_link) {
+                return function (event) {
+                    openLink(submission_link, false);
+                    event.stopPropagation();
+                }
+            }(submission.link);
+
             document.getElementById("links").appendChild(e_submission);
 
             if (modhash !== "") {
@@ -284,7 +301,7 @@ function putSubmissionsIntoUI(submissions) {
     e_submit.appendChild(t_submit);
 
     e_submit.onclick = function () {
-        openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page));
+        openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page), true);
     };
     document.getElementById("links").appendChild(e_submit);
 }
@@ -313,8 +330,11 @@ function formatAge(age) {
     }
 }
 
-function openLink(url) {
-    self.port.emit("open-link", url);
+function openLink(url, inforeground) {
+    self.port.emit("open-link", {
+        url: url,
+        inforeground: inforeground
+    });
 }
 
 function getJSON(path, success) {
