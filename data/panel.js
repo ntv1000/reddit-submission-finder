@@ -140,7 +140,7 @@ function putSubmissionsIntoUI(submissions) {
 
             var e_notloggedin = document.createElement("div");
             e_notloggedin.setAttribute("align", "center");
-            e_notloggedin.setAttribute("style", "font-size: 100% !important");
+            e_notloggedin.setAttribute("class", "loginerror");
             e_notloggedin.appendChild(t_notloggedin);
 
             document.getElementById("links").appendChild(e_notloggedin);
@@ -152,18 +152,45 @@ function putSubmissionsIntoUI(submissions) {
             var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
             var t_comments = document.createTextNode(submission.comments + " comments");
             var t_time = document.createTextNode(formatAge(submission.age));
+            var t_openin = document.createTextNode("Open in");
+            var t_currenttab = document.createTextNode("current tab");
+            var t_foregroundtab = document.createTextNode("foreground tab");
+            var t_backgroundtab = document.createTextNode("background tab");
 
             var e_submission = document.createElement("div");
             e_submission.setAttribute("class", "submission");
 
+            var e_submission_table = document.createElement("table");
+            e_submission.appendChild(e_submission_table);
+            var e_column_scorecontainer = document.createElement("td");
+            e_submission_table.appendChild(e_column_scorecontainer);
+            var e_column_rightpanel = document.createElement("td");
+            e_submission_table.appendChild(e_column_rightpanel);
+
             var e_scorecontainer = document.createElement("div");
             e_scorecontainer.setAttribute("class", "scorecontainer");
             e_scorecontainer.setAttribute("align", "center");
-            e_submission.appendChild(e_scorecontainer);
+            e_column_scorecontainer.appendChild(e_scorecontainer);
 
             var e_rightpanel = document.createElement("div");
             e_rightpanel.setAttribute("class", "rightpanel");
-            e_submission.appendChild(e_rightpanel);
+            e_submission_table.appendChild(e_rightpanel);
+
+            var e_maindivider1 = document.createElement("div");
+            e_maindivider1.setAttribute("class", "maindivider1");
+            e_rightpanel.appendChild(e_maindivider1);
+
+            var e_maindivider2 = document.createElement("div");
+            e_maindivider2.setAttribute("class", "maindivider2");
+            e_rightpanel.appendChild(e_maindivider2);
+
+            var e_maindivider3 = document.createElement("div");
+            e_maindivider3.setAttribute("class", "maindivider3");
+            e_rightpanel.appendChild(e_maindivider3);
+
+            var e_contentcontainer = document.createElement("div");
+            e_contentcontainer.setAttribute("class", "contentcontainer");
+            e_rightpanel.appendChild(e_contentcontainer);
 
 
             if (modhash !== "") {
@@ -190,46 +217,69 @@ function putSubmissionsIntoUI(submissions) {
                 }
             }
 
-            var e_openbackground = document.createElement("div");
-            e_openbackground.setAttribute("class", "newtab");
-            e_openbackground.setAttribute("title", "Open in background tab");
-            e_rightpanel.appendChild(e_openbackground);
+            var e_options = document.createElement("div");
+            e_options.setAttribute("class", "options");
+            e_options.appendChild(t_openin);
+            e_contentcontainer.appendChild(e_options);
 
-            var e_openbackground_image = document.createElement("img");
-            e_openbackground_image.setAttribute("class", "newtab");
-            e_openbackground_image.setAttribute("src", "./newtab.png");
-            e_openbackground.appendChild(e_openbackground_image);
+            var e_currenttab = document.createElement("div");
+            e_currenttab.setAttribute("class", "currenttab");
+            e_currenttab.appendChild(t_currenttab);
+            e_options.appendChild(e_currenttab);
+
+            var e_foregroundtab = document.createElement("div");
+            e_foregroundtab.setAttribute("class", "foregroundtab");
+            e_foregroundtab.appendChild(t_foregroundtab);
+            e_options.appendChild(e_foregroundtab);
+
+            var e_backgroundtab = document.createElement("div");
+            e_backgroundtab.setAttribute("class", "backgroundtab");
+            e_backgroundtab.appendChild(t_backgroundtab);
+            e_options.appendChild(e_backgroundtab);
 
             var e_title = document.createElement("div");
             e_title.setAttribute("class", "title");
             e_title.appendChild(t_title);
-            e_rightpanel.appendChild(e_title);
+            e_contentcontainer.appendChild(e_title);
 
             var e_subreddit = document.createElement("div");
             e_subreddit.setAttribute("class", "subreddit");
             e_subreddit.appendChild(t_subreddit);
-            e_rightpanel.appendChild(e_subreddit);
+            e_contentcontainer.appendChild(e_subreddit);
 
             var e_comments = document.createElement("div");
             e_comments.setAttribute("class", "comment");
             e_comments.appendChild(t_comments);
-            e_rightpanel.appendChild(e_comments);
+            e_contentcontainer.appendChild(e_comments);
 
             var e_time = document.createElement("div");
             e_time.setAttribute("class", "time");
             e_time.appendChild(t_time);
-            e_rightpanel.appendChild(e_time);
+            e_contentcontainer.appendChild(e_time);
 
-
-            e_rightpanel.onclick = function (submission_link) {
+            e_contentcontainer.onclick = function (submission_link) {
                 return function (event) {
-                    openLink(submission_link, true);
+                    openLink(submission_link, "default");
                 }
             }(submission.link);
 
-            e_openbackground.onclick = function (submission_link) {
+            e_currenttab.onclick = function (submission_link) {
                 return function (event) {
-                    openLink(submission_link, false);
+                    openLink(submission_link, "currenttab");
+                    event.stopPropagation();
+                }
+            }(submission.link);
+
+            e_foregroundtab.onclick = function (submission_link) {
+                return function (event) {
+                    openLink(submission_link, "foregroundtab");
+                    event.stopPropagation();
+                }
+            }(submission.link);
+
+            e_backgroundtab.onclick = function (submission_link) {
+                return function (event) {
+                    openLink(submission_link, "backgroundtab");
                     event.stopPropagation();
                 }
             }(submission.link);
@@ -330,12 +380,17 @@ function formatAge(age) {
     }
 }
 
-function openLink(url, inforeground) {
+function openLink(url, where) {
     self.port.emit("open-link", {
         url: url,
-        inforeground: inforeground
+        where: where
     });
 }
+
+function closePanel() {
+    self.port.emit("close-panel");
+}
+
 
 function getJSON(path, success) {
     var xhr = new XMLHttpRequest();

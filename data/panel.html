@@ -4,27 +4,43 @@
 <head>
 </head>
 <style>
-    .submission {
-        width: 100%;
-        margin-top: 1px;
-        border: 1px solid grey;
-        border-radius: 5px;
+    body {
+        margin: 0px 0px 8px 0px;
+    }
+    
+    .loginerror {
         font-size: 100% !important;
+        border-bottom: 1px solid grey;
+        padding-bottom: 5px;
+        padding-top: 5px;
+        background-color: #db4f53;
+        color: white;
+    }
+    
+    .submission {
+        width: calc(100% - 0px);
+        margin-top: 0px;
+        border-bottom: 1px solid grey;
+        font-size: 100% !important;
+        padding: 0px 0px;
+        position: relative;
     }
     
     .score {
         width: 40px;
-        background-color: #CFDBC5;
+        background-color: #676767;
         border-radius: 3px;
         font-size: 100% !important;
-        text-align: center
+        text-align: center;
+        color: white;
     }
     
     .scorecontainer {
+        position: absolute;
+        top: 8px;
         width: 40px;
-        padding-left: 5px;
-        margin-top: 3px;
-        float: left;
+        padding-left: 3px;
+        padding-right: 3px;
     }
     
     .subreddit {
@@ -43,7 +59,7 @@
     .time {
         margin-left: auto;
         margin-right: auto;
-        width: 50%;
+        width: calc(50% - 10px);
         text-align: right !important;
         font-size: 80% !important;
         overflow: hidden;
@@ -54,50 +70,55 @@
     }
     
     .rightpanel {
-        padding: 3px 10px 5px 5px;
-        border-radius: 0px 5px 5px 0px;
+        padding-left: 49px;
         overflow: hidden;
-        margin-left: 47px;
-        border-left-style: solid;
-        border-left-color: #d6d6d6;
-        border-left-width: 1px;
-        cursor: pointer;
         position: relative;
     }
     
-    .rightpanel:hover {
-        background-color: #f8f8f8;
+    .contentcontainer {
+        width: 100%;
+        height: auto;
+        overflow: hidden;
+        cursor: pointer;
+        padding: 3px 10px 5px 4px;
+        position: relative;
     }
     
-    div.newtab {
-        overflow: visible;
+    .contentcontainer:hover {
+        background-color: #efefef;
+    }
+    
+    .maindivider1 {
+        float: left;
+        width: 2px;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: #15a2d0;
         position: absolute;
-        right: 10px;
-        top: 8px;
-        height: 30px;
-        width: 30px;
-        border-radius: 2000px;
-        border-style: solid;
-        border-width: 1px;
-        border-color: grey;
+        margin-left: 47px;
+    }
+    
+    .maindivider2 {
+        float: left;
+        width: 2px;
+        height: 5px;
+        top: 0;
+        left: 0;
         background-color: white;
-        z-index: 100;
-        padding: 0px;
-        visibility: hidden;
+        position: absolute;
+        margin-left: 47px;
     }
     
-    div.newtab:hover {
-        background-color: #d9d9d9;
-    }
-    
-    .rightpanel:hover > div.newtab {
-        visibility: visible;
-    }
-    
-    img.newtab {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
+    .maindivider3 {
+        float: left;
+        width: 2px;
+        height: 5px;
+        left: 0;
+        bottom: 0;
+        background-color: white;
+        position: absolute;
+        margin-left: 47px;
     }
     
     .submitbutton {
@@ -111,7 +132,7 @@
         border-radius: 5px;
         text-align: center !important;
         font-size: 140% !important;
-        cursor: pointer
+        cursor: pointer;
     }
     
     .submitbutton:hover {
@@ -125,7 +146,7 @@
         border-width: 0 8px 8px 8px;
         border-color: transparent transparent #c6c6c6 transparent;
         margin-bottom: 5px;
-        cursor: pointer
+        cursor: pointer;
     }
     
     .downvote {
@@ -135,7 +156,134 @@
         border-width: 8px 8px 0px 8px;
         border-color: #c6c6c6 transparent transparent transparent;
         margin-top: 5px;
-        cursor: pointer
+        cursor: pointer;
+    }
+    
+    table {
+        width: 100%;
+        border-spacing: 0px;
+    }
+    
+    td {
+        padding: 0px;
+    }
+    
+    #loading {
+        margin-top: 45%;
+    }
+    
+    .spinner {
+        width: 50px;
+        height: 30px;
+        text-align: center;
+        font-size: 10px;
+        transform: rotate(90deg);
+    }
+    
+    .spinner > div {
+        background-color: #333;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -moz-animation: stretchdelay 0.6s infinite ease-in-out;
+        animation: stretchdelay 0.6s infinite ease-in-out;
+    }
+    
+    .spinner .rect2 {
+        -moz-animation-delay: -1.1s;
+        animation-delay: -1.1s;
+    }
+    
+    .spinner .rect3 {
+        -moz-animation-delay: -1.0s;
+        animation-delay: -1.0s;
+    }
+    
+    .spinner .rect4 {
+        -moz-animation-delay: -0.9s;
+        animation-delay: -0.9s;
+    }
+    
+    .spinner .rect5 {
+        -moz-animation-delay: -0.8s;
+        animation-delay: -0.8s;
+    }
+    
+    @-moz-keyframes stretchdelay {
+        0%, 40%, 100% {
+            -moz-transform: scaleY(0.4)
+        }
+        20% {
+            -moz-transform: scaleY(1.0)
+        }
+    }
+    
+    @keyframes stretchdelay {
+        0%, 40%, 100% {
+            transform: scaleY(0.4);
+            -moz-transform: scaleY(0.4);
+        }
+        20% {
+            transform: scaleY(1.0);
+            -moz-transform: scaleY(1.0);
+        }
+    }
+    
+    div.options {
+        overflow: visible;
+        position: absolute;
+        bottom: 0px;
+        height: 18px;
+        width: 100%;
+        background-color: white;
+        z-index: 100;
+        padding: 0px;
+        visibility: hidden;
+        padding-left: 10px;
+    }
+    
+    .contentcontainer:hover > div.options {
+        background-color: #efefef;
+    }
+    
+    .rightpanel:hover > div.contentcontainer > div.options {
+        visibility: visible;
+    }
+    
+    div.options>div {
+        position: absolute;
+        top: 0;
+        bottom: 0px;
+        padding-top: 1px;
+        border-style: solid;
+        border-width: 0px 0px 0px 0px;
+        border-color: grey;
+        border-radius: 3px 3px 0px 0px;
+        background-color: #15a2d0;
+        z-index: 101;
+        font-size: 85% !important;
+        text-align: center;
+        vertical-align: middle;
+        color: white;
+    }
+    
+    .currenttab {
+        right: 214px;
+        width: 90px;
+    }
+    
+    .foregroundtab {
+        right: 122px;
+        width: 90px;
+    }
+    
+    .backgroundtab {
+        right: 30px;
+        width: 90px;
+    }
+    
+    div.options>div:hover {
+        background-color: #0c8cb5;
     }
 </style>
 
@@ -145,7 +293,13 @@
 
         </div>
         <div align="center">
-            <img src="loading.gif" height="20" width="20" id="loading" style="margin-top:50px">
+            <div id="loading" class="spinner">
+                <div class="rect1"></div>
+                <div class="rect2"></div>
+                <div class="rect3"></div>
+                <div class="rect4"></div>
+                <div class="rect5"></div>
+            </div>
         </div>
     </div>
 </body>
