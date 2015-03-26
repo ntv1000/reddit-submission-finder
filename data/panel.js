@@ -4,10 +4,13 @@ var response_counter = 0;
 var total_submission_list = [];
 var modhash = "";
 
+var hideOpenOptions = false;
+
 self.port.on("show", function onShow(init_data) {
     reset();
     current_page = init_data.url;
     modhash = init_data.modhash;
+    hideOpenOptions = init_data.hideOpenOptions;
     getAllSubmissions(current_page);
 });
 
@@ -25,6 +28,7 @@ function reset() {
     response_counter = 0;
     total_submission_list = [];
     document.getElementById("loading").style.display = "block";
+    hideOpenOptions = false;
 }
 
 function getAllSubmissions(url) {
@@ -216,26 +220,27 @@ function putSubmissionsIntoUI(submissions) {
                     e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
                 }
             }
+            if (!hideOpenOptions) {
+                var e_options = document.createElement("div");
+                e_options.setAttribute("class", "options");
+                e_options.appendChild(t_openin);
+                e_contentcontainer.appendChild(e_options);
 
-            var e_options = document.createElement("div");
-            e_options.setAttribute("class", "options");
-            e_options.appendChild(t_openin);
-            e_contentcontainer.appendChild(e_options);
+                var e_currenttab = document.createElement("div");
+                e_currenttab.setAttribute("class", "currenttab");
+                e_currenttab.appendChild(t_currenttab);
+                e_options.appendChild(e_currenttab);
 
-            var e_currenttab = document.createElement("div");
-            e_currenttab.setAttribute("class", "currenttab");
-            e_currenttab.appendChild(t_currenttab);
-            e_options.appendChild(e_currenttab);
+                var e_foregroundtab = document.createElement("div");
+                e_foregroundtab.setAttribute("class", "foregroundtab");
+                e_foregroundtab.appendChild(t_foregroundtab);
+                e_options.appendChild(e_foregroundtab);
 
-            var e_foregroundtab = document.createElement("div");
-            e_foregroundtab.setAttribute("class", "foregroundtab");
-            e_foregroundtab.appendChild(t_foregroundtab);
-            e_options.appendChild(e_foregroundtab);
-
-            var e_backgroundtab = document.createElement("div");
-            e_backgroundtab.setAttribute("class", "backgroundtab");
-            e_backgroundtab.appendChild(t_backgroundtab);
-            e_options.appendChild(e_backgroundtab);
+                var e_backgroundtab = document.createElement("div");
+                e_backgroundtab.setAttribute("class", "backgroundtab");
+                e_backgroundtab.appendChild(t_backgroundtab);
+                e_options.appendChild(e_backgroundtab);
+            }
 
             var e_title = document.createElement("div");
             e_title.setAttribute("class", "title");
@@ -263,26 +268,28 @@ function putSubmissionsIntoUI(submissions) {
                 }
             }(submission.link);
 
-            e_currenttab.onclick = function (submission_link) {
-                return function (event) {
-                    openLink(submission_link, "currenttab");
-                    event.stopPropagation();
-                }
-            }(submission.link);
+            if (!hideOpenOptions) {
+                e_currenttab.onclick = function (submission_link) {
+                    return function (event) {
+                        openLink(submission_link, "currenttab");
+                        event.stopPropagation();
+                    }
+                }(submission.link);
 
-            e_foregroundtab.onclick = function (submission_link) {
-                return function (event) {
-                    openLink(submission_link, "foregroundtab");
-                    event.stopPropagation();
-                }
-            }(submission.link);
+                e_foregroundtab.onclick = function (submission_link) {
+                    return function (event) {
+                        openLink(submission_link, "foregroundtab");
+                        event.stopPropagation();
+                    }
+                }(submission.link);
 
-            e_backgroundtab.onclick = function (submission_link) {
-                return function (event) {
-                    openLink(submission_link, "backgroundtab");
-                    event.stopPropagation();
-                }
-            }(submission.link);
+                e_backgroundtab.onclick = function (submission_link) {
+                    return function (event) {
+                        openLink(submission_link, "backgroundtab");
+                        event.stopPropagation();
+                    }
+                }(submission.link);
+            }
 
             document.getElementById("links").appendChild(e_submission);
 

@@ -15,11 +15,32 @@
   },
   "preferences": [
     {
-      "name": "openInNewTab",
-      "title": "Open links in a new tab",
-      "description": "When checked, links will be opened in a new tab instead of the current tab",
+      "name": "openLinkDefaultLocation",
+      "type": "menulist",
+      "title": "Action when submission title is clicked",
+      "description": "The location at which a submission will be opened when its title is clicked.",
+      "value": "foregroundtab",
+      "options": [
+        {
+          "value": "currenttab",
+          "label": "Open in current tab"
+        },
+        {
+          "value": "foregroundtab",
+          "label": "Open in new foreground tab"
+        },
+        {
+          "value": "backgroundtab",
+          "label": "Open in new background tab"
+        }
+      ]
+    },
+    {
+      "name": "hideOpenOptions",
+      "title": "Hide options for opening submissions",
+      "description": "When checked, the hover-options for submission will be hidden.",
       "type": "bool",
-      "value": true
+      "value": false
     }
   ]
 }
