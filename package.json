@@ -6,17 +6,20 @@
   "author": "ntv1000",
   "license": "MPL 2.0",
   "version": "0.8",
-
   "permissions": {
-    "cross-domain-content": ["http://api.reddit.com", "http://www.reddit.com"],
-	"private-browsing": true
+    "cross-domain-content": [
+      "http:\/\/api.reddit.com",
+      "http:\/\/www.reddit.com"
+    ],
+    "private-browsing": true
   },
-  
-  "preferences": [{
-        "name": "openInNewTab",
-        "title": "Open links in a new tab",
-        "description": "When checked, links will be opened in a new tab instead of the current tab",
-        "type": "bool",
-        "value": true
-    }]
+  "preferences": [
+    {
+      "name": "openInNewTab",
+      "title": "Open links in a new tab",
+      "description": "When checked, links will be opened in a new tab instead of the current tab",
+      "type": "bool",
+      "value": true
+    }
+  ]
 }
