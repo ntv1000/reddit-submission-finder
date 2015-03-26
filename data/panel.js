@@ -358,7 +358,7 @@ function putSubmissionsIntoUI(submissions) {
     e_submit.appendChild(t_submit);
 
     e_submit.onclick = function () {
-        openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page), true);
+        openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page), "foregroundtab");
     };
     document.getElementById("links").appendChild(e_submit);
 }
