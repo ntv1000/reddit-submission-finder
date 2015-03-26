@@ -28,6 +28,7 @@ function reset() {
     response_counter = 0;
     total_submission_list = [];
     document.getElementById("loading").style.display = "block";
+    document.getElementById("submitbutton").style.display = "none";
     hideOpenOptions = false;
 }
 
@@ -111,6 +112,7 @@ function handleResponse(jsonData) {
     if (response_counter === responses_expected) {
         total_submission_list = distinctSubmissions(total_submission_list);
         document.getElementById("loading").style.display = "none";
+        document.getElementById("submitbutton").style.display = "block";
         putSubmissionsIntoUI(total_submission_list);
     }
 }
@@ -352,15 +354,10 @@ function putSubmissionsIntoUI(submissions) {
             }
         }
     }
-    var t_submit = document.createTextNode("Create submission");
-    var e_submit = document.createElement("div");
-    e_submit.setAttribute("class", "submitbutton");
-    e_submit.appendChild(t_submit);
 
-    e_submit.onclick = function () {
+    document.getElementById("submitbutton").onclick = function () {
         openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page), "foregroundtab");
     };
-    document.getElementById("links").appendChild(e_submit);
 }
 
 function formatAge(age) {
