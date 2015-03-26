@@ -364,6 +364,8 @@ function putSubmissionsIntoUI(submissions) {
 }
 
 function formatAge(age) {
+    var result = "";
+    var value = 0;
     var MINUTE = 60 * 1000;
     var HOUR = MINUTE * 60;
     var DAY = HOUR * 24;
@@ -371,20 +373,32 @@ function formatAge(age) {
     var YEAR = WEEK * 52;
     var MONTH = YEAR / 12;
     if (age < MINUTE) {
-        return age + " seconds ago";
+        result = age + " second";
     } else if (age < HOUR) {
-        return Math.floor(age / MINUTE) + " minutes ago";
+        value = Math.floor(age / MINUTE);
+        result = value + " minute";
     } else if (age < DAY) {
-        return Math.floor(age / HOUR) + " hours ago";
+        value = Math.floor(age / HOUR);
+        result = value + " hour";
     } else if (age < WEEK) {
-        return Math.floor(age / DAY) + " days ago";
+        value = Math.floor(age / DAY);
+        result = value + " day";
     } else if (age < MONTH) {
-        return Math.floor(age / WEEK) + " weeks ago";
+        value = Math.floor(age / WEEK);
+        result = value + " week";
     } else if (age < YEAR) {
-        return Math.floor(age / MONTH) + " months ago";
+        value = Math.floor(age / MONTH);
+        result = value + " month";
     } else {
-        return Math.floor(age / YEAR) + " years ago";
+        value = Math.floor(age / YEAR);
+        result = value + " year";
     }
+
+    if (value !== 1) {
+        result += "s";
+    }
+    result += " ago";
+    return result;
 }
 
 function openLink(url, where) {
