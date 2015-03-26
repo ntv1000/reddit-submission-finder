@@ -7,7 +7,6 @@ var modhash = "";
 var hideOpenOptions = false;
 
 self.port.on("show", function onShow(init_data) {
-    reset();
     current_page = init_data.url;
     modhash = init_data.modhash;
     hideOpenOptions = init_data.hideOpenOptions;
@@ -15,13 +14,16 @@ self.port.on("show", function onShow(init_data) {
 });
 
 self.port.on("hide", function onHide() {
+
+    reset();
+});
+
+function reset() {
     var e_links = document.getElementById("links");
     while (e_links.firstChild) {
         e_links.removeChild(e_links.firstChild);
     }
-});
 
-function reset() {
     current_page = "";
     modhash = "";
     responses_expected = 0;
