@@ -28,7 +28,7 @@ function reset() {
     response_counter = 0;
     total_submission_list = [];
     document.getElementById("loading").style.display = "block";
-    document.getElementById("submitbutton").style.display = "none";
+    document.getElementById("footer").style.display = "none";
     hideOpenOptions = false;
 }
 
@@ -112,7 +112,7 @@ function handleResponse(jsonData) {
     if (response_counter === responses_expected) {
         total_submission_list = distinctSubmissions(total_submission_list);
         document.getElementById("loading").style.display = "none";
-        document.getElementById("submitbutton").style.display = "block";
+        document.getElementById("footer").style.display = "block";
         putSubmissionsIntoUI(total_submission_list);
     }
 }
@@ -357,6 +357,13 @@ function putSubmissionsIntoUI(submissions) {
 
     document.getElementById("submitbutton").onclick = function () {
         openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(current_page), "foregroundtab");
+    };
+    document.getElementById("reportproblembutton").onclick = function () {
+        var username = "ntv1000";
+        var subject = "Bug report: submission not found";
+        var message = "Page that was searched for: " + current_page + "\n\nMissing submission: [Insert a link to the submission you thing is missing here]\n\nAdditional info: [optional]";
+        var template_url = "http://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(username) + "&message=" + encodeURIComponent(message);
+        openLink(template_url, "foregroundtab");
     };
 }
 

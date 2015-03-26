@@ -122,25 +122,6 @@
         margin-left: 47px;
     }
     
-    #submitbutton {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 40px;
-        padding-top: 15px;
-        width: 50%;
-        height: 40px;
-        border: 1px solid grey;
-        border-radius: 5px;
-        text-align: center !important;
-        font-size: 140% !important;
-        cursor: pointer;
-        display: none;
-    }
-    
-    #submitbutton:hover {
-        background-color: lightgrey;
-    }
-    
     .upvote {
         width: 0;
         height: 0;
@@ -287,6 +268,39 @@
     div.options>div:hover {
         background-color: #0c8cb5;
     }
+    
+    #footer {
+        display: none;
+    }
+    
+    #submitbutton {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 40px;
+        padding-top: 15px;
+        width: 50%;
+        height: 40px;
+        border: 1px solid grey;
+        border-radius: 5px;
+        text-align: center !important;
+        font-size: 140% !important;
+        cursor: pointer;
+    }
+    
+    #submitbutton:hover {
+        background-color: lightgrey;
+    }
+    
+    #reportproblembutton {
+        margin-top: 20px;
+        text-align: center;
+        cursor: pointer;
+        color: darkgrey;
+    }
+    
+    #reportproblembutton:hover {
+        text-decoration: underline;
+    }
 </style>
 
 <body style="overflow-y: scroll">
@@ -294,7 +308,10 @@
         <div id="links">
 
         </div>
-        <div id="submitbutton">Create submission</div>
+        <div id="footer">
+            <div id="submitbutton">Create submission</div>
+            <div id="reportproblembutton">Submission missing?</div>
+        </div>
         <div align="center">
             <div id="loading" class="spinner">
                 <div class="rect1"></div>
