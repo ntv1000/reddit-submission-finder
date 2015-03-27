@@ -14,7 +14,6 @@ self.port.on("show", function onShow(init_data) {
 });
 
 self.port.on("hide", function onHide() {
-
     reset();
 });
 
@@ -364,7 +363,7 @@ function putSubmissionsIntoUI(submissions) {
         var username = "ntv1000";
         var subject = "Bug report: submission not found";
         var message = "Page that was searched for: " + current_page + "\n\nMissing submission: [Insert a link to the submission you thing is missing here]\n\nAdditional info: [optional]";
-        var template_url = "http://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(username) + "&message=" + encodeURIComponent(message);
+        var template_url = "http://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(subject) + "&message=" + encodeURIComponent(message);
         openLink(template_url, "foregroundtab");
     };
 }
