@@ -6,7 +6,7 @@ Inspired by [Socialite](https://addons.mozilla.org/en-US/firefox/addon/socialite
 
 # Screenshot
 
-![](http://i.imgur.com/lXy3Y6o.png)
+![](http://i.imgur.com/k4Ccc9l.png)
 
 
 # To-do
