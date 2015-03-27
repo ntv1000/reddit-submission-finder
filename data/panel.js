@@ -161,9 +161,9 @@ function putSubmissionsIntoUI(submissions) {
             var t_comments = document.createTextNode(submission.comments + " comments");
             var t_time = document.createTextNode(formatAge(submission.age));
             var t_openin = document.createTextNode("Open in");
-            var t_currenttab = document.createTextNode("current tab");
-            var t_foregroundtab = document.createTextNode("foreground tab");
-            var t_backgroundtab = document.createTextNode("background tab");
+            var t_currenttab = document.createTextNode("Current Tab");
+            var t_foregroundtab = document.createTextNode("Foreground Tab");
+            var t_backgroundtab = document.createTextNode("Background Tab");
 
             var e_submission = document.createElement("div");
             e_submission.setAttribute("class", "submission");
