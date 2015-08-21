@@ -1,24 +1,37 @@
 var current_page;
-var responses_expected = 0;
-var response_counter = 0;
-var total_submission_list = [];
 var modhash = "";
+var asset_upvote_grey = "";
+var asset_upvote_orange = "";
+var asset_downvote_grey = "";
+var asset_downvote_blue = "";
+
+var asset_arrow_right = "";
+var asset_arrow_down = "";
+var asset_arrow_up = "";
 
 var hideOpenOptions = false;
 
 self.port.on("show", function onShow(init_data) {
-    current_page = init_data.url;
-    current_page = "http://www.reddit.com";
+    reset();
+    
     modhash = init_data.modhash;
+    current_page = init_data.url;
     hideOpenOptions = init_data.hideOpenOptions;
-    getAllSubmissions(current_page);
+    asset_upvote_grey = init_data.asset_upvote_grey;
+    asset_upvote_orange = init_data.asset_upvote_orange;
+    asset_downvote_grey = init_data.asset_downvote_grey;
+    asset_downvote_blue = init_data.asset_downvote_blue;
+    
+    asset_arrow_right = init_data.asset_arrow_right;
+    asset_arrow_down = init_data.asset_arrow_down;
+    asset_arrow_up = init_data.asset_arrow_up;
 });
 
 self.port.on("hide", function onHide() {
     reset();
 });
 
-function reset() {
+function reset(){
     var e_links = document.getElementById("links");
     while (e_links.firstChild) {
         e_links.removeChild(e_links.firstChild);
@@ -26,139 +39,39 @@ function reset() {
 
     current_page = "";
     modhash = "";
-    responses_expected = 0;
-    response_counter = 0;
-    total_submission_list = [];
     document.getElementById("loading").style.display = "block";
     document.getElementById("header").style.display = "none";
-    document.getElementById("links").style.display = "none";
+    document.getElementById("links").style.top = "0px";
     document.getElementById("footer").style.display = "none";
     hideOpenOptions = false;
 }
 
-function getAllSubmissions(url) {
-    var reddit_urls = getAllURLVersions(url);
-    responses_expected = reddit_urls.length;
-    for (var i = 0; reddit_url = reddit_urls[i]; i++) {
-        getJSON(reddit_url, handleResponse);
-    }
-}
-
-function getAllURLVersions(url) {
-    var host = url.split("/")[2];
-    var result = [];
-    if ((host === 'youtube.com' || host === 'www.youtube.com') && url.split("/")[3].indexOf('watch?') === 0) {
-        youtubeID = function () {
-            var query = url.substring(url.indexOf('?') + 1);
-            var parameters = query.split('&');
-            for (var i = 0; i < parameters.length; i++) {
-                var pair = parameters[i].split('=');
-                if (pair[0] === 'v') {
-                    return pair[1];
-                }
-            }
-            return '';
-        }();
-
-        // some youtube id's contain a dash at the start and reddit search interprets that as NOT
-        // workaround is to search without the dash in the id
-        if (youtubeID.indexOf('-') === 0) {
-            youtubeID = youtubeID.substring(1);
-        }
-
-        result.push('http://api.reddit.com/search.json?q=' + encodeURIComponent('(url:' + youtubeID + ') (site:youtube.com OR site:youtu.be)'))
-    } else {
-        var without_http = "";
-        if (url.slice(-1) === "/") {
-            url = url.substring(0, url.length - 1);
-        }
-        result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url));
-        result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url + "/"));
-        if (url.indexOf('https') === 0) {
-            without_http = url.substring(8);
-            result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-            result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http + "/"));
-        } else {
-            if (url.indexOf('http') === 0) {
-                without_http = url.substring(7);
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
-            } else {
-                without_http = url;
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
-            }
-        }
-    }
-    return result;
-}
-
-function handleResponse(jsonData) {
-    var now = new Date();
-    var now_timestamp = now.getTime(); // = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
-    var submissions = [];
-    for (var i = 0; entry = jsonData.data.children[i]; i++) {
-        submission_timestamp = entry.data.created_utc * 1000;
-        submissions[i] = {
-            fullname: entry.data.name,
-            link: "http://reddit.com" + entry.data.permalink,
-            title: entry.data.title,
-            score: entry.data.score + "",
-            age: (now_timestamp - submission_timestamp),
-            comments: entry.data.num_comments + "",
-            subreddit: entry.data.subreddit,
-            likes: entry.data.likes,
-        };
-    }
-    total_submission_list.push.apply(total_submission_list, submissions);
-
-    response_counter++;
-    if (response_counter === responses_expected) {
-        total_submission_list = distinctSubmissions(total_submission_list);
-        document.getElementById("loading").style.display = "none";
-        document.getElementById("footer").style.display = "block";
-        putSubmissionsIntoUI(total_submission_list);
-    }
-}
-
-function distinctSubmissions(submission_list) {
-    var u = {},
-        a = [];
-    for (var i = 0, l = submission_list.length; i < l; ++i) {
-        if (u.hasOwnProperty(submission_list[i].fullname)) {
-            continue;
-        }
-        a.push(submission_list[i]);
-        u[submission_list[i].fullname] = 1;
-    }
-    return a;
-}
-
-function putSubmissionsIntoUI(submissions) {
+self.port.on("display-submissions", function putSubmissionsIntoUI(submissions) {
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("footer").style.display = "block";
     if (submissions.length === 0) {
-        var t_nonefound = document.createTextNode("This page hasn't been submitted to reddit, yet.");
+        var t_nonefound = document.createTextNode("It seems like this page hasn't been submitted to reddit, yet.");
 
         var e_nonefound = document.createElement("div");
         e_nonefound.setAttribute("align", "center");
-        e_nonefound.setAttribute("style", "font-size: 140% !important");
+        e_nonefound.setAttribute("style", "font-size: 95% !important");
+        e_nonefound.appendChild(document.createElement("br"));
         e_nonefound.appendChild(t_nonefound);
-
+        
         document.getElementById("links").appendChild(e_nonefound);
     } else {
         if (modhash === "") {
             document.getElementById("header").style.display = "block";
+            document.getElementById("links").style.top = "27px";
         }
         for (var i = 0; submission = submissions[i]; i++) {
 
             var t_score = document.createTextNode(submission.score);
             var t_title = document.createTextNode(submission.title);
             var t_time = document.createTextNode(formatAge(submission.age));
-            var t_user = document.createTextNode(formatAge("ntv1000"));
+            var t_user = document.createTextNode(submission.user);
             var t_subreddit = document.createTextNode("/r/" + submission.subreddit);
             var t_comments = document.createTextNode(submission.comments + " comments");
-            var t_currenttab = document.createTextNode("\u2193");
-            var t_foregroundtab = document.createTextNode("\u2192");
-            var t_backgroundtab = document.createTextNode("\u2191");
 
             var e_submission = document.createElement("div");
             e_submission.setAttribute("class", "submission");
@@ -183,14 +96,14 @@ function putSubmissionsIntoUI(submissions) {
             e_contentcontainer.setAttribute("class", "contentcontainer");
             e_rightpanel.appendChild(e_contentcontainer);
 
-
             if (modhash !== "") {
-                var e_upvote = document.createElement("div");
+                var e_upvote = document.createElement("img");
                 e_upvote.setAttribute("class", "upvote");
+                e_upvote.setAttribute("src", asset_upvote_grey);
                 e_upvote.setAttribute("id", "upvote" + submission.fullname);
                 e_scorecontainer.appendChild(e_upvote);
                 if (submission.likes === true) {
-                    e_upvote.style.borderColor = "transparent transparent #ff8b60 transparent";
+                    e_upvote.setAttribute("src", asset_upvote_orange);
                 }
             }
             var e_score = document.createElement("div");
@@ -199,32 +112,42 @@ function putSubmissionsIntoUI(submissions) {
             e_scorecontainer.appendChild(e_score);
 
             if (modhash !== "") {
-                var e_downvote = document.createElement("div");
+                var e_downvote = document.createElement("img");
                 e_downvote.setAttribute("class", "downvote");
+                e_downvote.setAttribute("src", asset_downvote_grey);
                 e_downvote.setAttribute("id", "downvote" + submission.fullname);
                 e_scorecontainer.appendChild(e_downvote);
                 if (submission.likes === false) {
-                    e_downvote.style.borderColor = "#9494ff transparent transparent transparent";
+                    e_downvote.setAttribute("src", asset_downvote_blue);
                 }
             }
             if (!hideOpenOptions) {
                 var e_options = document.createElement("div");
                 e_options.setAttribute("class", "options");
                 e_contentcontainer.appendChild(e_options);
+                
+                var e_currenttab_img = document.createElement("img");
+                e_currenttab_img.setAttribute("src", asset_arrow_down);
 
                 var e_currenttab = document.createElement("div");
                 e_currenttab.setAttribute("class", "currenttab");
-                e_currenttab.appendChild(t_currenttab);
+                e_currenttab.appendChild(e_currenttab_img);
                 e_options.appendChild(e_currenttab);
+                
+                var e_foregroundtab_img = document.createElement("img");
+                e_foregroundtab_img.setAttribute("src", asset_arrow_right);
 
                 var e_foregroundtab = document.createElement("div");
                 e_foregroundtab.setAttribute("class", "foregroundtab");
-                e_foregroundtab.appendChild(t_foregroundtab);
+                e_foregroundtab.appendChild(e_foregroundtab_img);
                 e_options.appendChild(e_foregroundtab);
+
+                var e_backgroundtab_img = document.createElement("img");
+                e_backgroundtab_img.setAttribute("src", asset_arrow_up);
 
                 var e_backgroundtab = document.createElement("div");
                 e_backgroundtab.setAttribute("class", "backgroundtab");
-                e_backgroundtab.appendChild(t_backgroundtab);
+                e_backgroundtab.appendChild(e_backgroundtab_img);
                 e_options.appendChild(e_backgroundtab);
             }
 
@@ -295,61 +218,49 @@ function putSubmissionsIntoUI(submissions) {
             document.getElementById("links").appendChild(e_submission);
 
             if (modhash !== "") {
-                e_upvote.onclick = function (submission_fullname, t_score) {
+                e_upvote.onclick = function (submission_local, t_score) {
                     return function (event) {
-                        var submission = total_submission_list.find(function (e, i, a) {
-                            if (e.fullname === submission_fullname) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        if (submission.likes === true) {
-                            castVote(submission_fullname, 0);
+                        if (submission_local.likes === true) {
+                            castVote(submission_local.fullname, 0);
                             t_score.textContent = parseInt(t_score.textContent) - 1;
                             // -1
-                            submission.likes = null;
+                            submission_local.likes = null;
                         } else {
-                            castVote(submission_fullname, 1);
-                            if (submission.likes === null) {
+                            castVote(submission_local.fullname, 1);
+                            if (submission_local.likes === null) {
                                 t_score.textContent = parseInt(t_score.textContent) + 1;
                                 // +1
                             } else {
                                 t_score.textContent = parseInt(t_score.textContent) + 2;
                                 // + 2
                             }
-                            submission.likes = true;
+                            submission_local.likes = true;
                         }
                         event.stopPropagation();
                     }
-                }(submission.fullname, t_score);
+                }(submission, t_score);
 
-                e_downvote.onclick = function (submission_fullname, t_score) {
+                e_downvote.onclick = function (submission_local, t_score) {
                     return function (event) {
-                        var submission = total_submission_list.find(function (e, i, a) {
-                            if (e.fullname === submission_fullname) {
-                                return true;
-                            }
-                            return false;
-                        });
-                        if (submission.likes === false) {
-                            castVote(submission_fullname, 0);
+                        if (submission_local.likes === false) {
+                            castVote(submission_local.fullname, 0);
                             t_score.textContent = parseInt(t_score.textContent) + 1;
                             // +1
-                            submission.likes = null;
+                            submission_local.likes = null;
                         } else {
-                            castVote(submission_fullname, -1);
-                            if (submission.likes === null) {
+                            castVote(submission_local.fullname, -1);
+                            if (submission_local.likes === null) {
                                 t_score.textContent = parseInt(t_score.textContent) - 1;
                                 // -1
                             } else {
                                 t_score.textContent = parseInt(t_score.textContent) - 2;
                                 // - 2
                             }
-                            submission.likes = false;
+                            submission_local.likes = false;
                         }
                         event.stopPropagation();
                     }
-                }(submission.fullname, t_score);
+                }(submission, t_score);
             }
         }
     }
@@ -364,7 +275,7 @@ function putSubmissionsIntoUI(submissions) {
         var template_url = "http://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(subject) + "&message=" + encodeURIComponent(message);
         openLink(template_url, "foregroundtab");
     };
-}
+});
 
 function formatAge(age) {
     var result = "";
@@ -411,42 +322,24 @@ function openLink(url, where) {
     });
 }
 
-function closePanel() {
-    self.port.emit("close-panel");
-}
-
-
-function getJSON(path, success) {
-    var xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = function () {
-        if (xhr.readyState === 4) {
-            if (xhr.status === 200) {
-                if (success)
-                    success(JSON.parse(xhr.responseText));
-            }
-        }
-    };
-    xhr.open("GET", path, true);
-    xhr.send();
-}
-
 function castVote(fullname, direction) {
     var url = "http://www.reddit.com/api/vote?dir=" + direction + "&id=" + fullname;
-
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("X-Modhash", modhash);
-    xhr.send();
+    
+    // var xhr = new XMLHttpRequest();
+    // xhr.open("POST", url, true);
+    // xhr.setRequestHeader("X-Modhash", modhash);
+    // xhr.send();
+    self.port.emit("vote-submission", url);
 
     // update UI accordingly
     if (direction === 1) {
-        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #ff8b60 transparent";
-        document.getElementById("downvote" + fullname).style.borderColor = "#c6c6c6 transparent transparent transparent";
+        document.getElementById("upvote" + fullname).setAttribute("src", asset_upvote_orange);
+        document.getElementById("downvote" + fullname).setAttribute("src", asset_downvote_grey);
     } else if (direction === 0) {
-        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #c6c6c6 transparent";
-        document.getElementById("downvote" + fullname).style.borderColor = "#c6c6c6 transparent transparent transparent";
+        document.getElementById("upvote" + fullname).setAttribute("src", asset_upvote_grey);
+        document.getElementById("downvote" + fullname).setAttribute("src", asset_downvote_grey);
     } else if (direction === -1) {
-        document.getElementById("upvote" + fullname).style.borderColor = "transparent transparent #c6c6c6 transparent";
-        document.getElementById("downvote" + fullname).style.borderColor = "#9494ff transparent transparent transparent";
+        document.getElementById("upvote" + fullname).setAttribute("src", asset_upvote_grey);
+        document.getElementById("downvote" + fullname).setAttribute("src", asset_downvote_blue);
     }
 }
