@@ -1,0 +1,6 @@
+*.xpi
+
+# Created by https://www.gitignore.io/api/visualstudiocode
+
+### VisualStudioCode ###
+.settings

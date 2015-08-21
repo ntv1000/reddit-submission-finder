@@ -1,11 +1,11 @@
 {
   "name": "reddit-submission-finder",
   "title": "Reddit Submission Finder",
-  "id": "jid1-llKmM9vA7zikBg",
   "description": "Extension to find previous reddit submissions of the current page",
+  "main": "index.js",
   "author": "ntv1000",
   "license": "MPL 2.0",
-  "version": "0.9",
+  "version": "0.9.0",
   "permissions": {
     "cross-domain-content": [
       "http:\/\/api.reddit.com",
