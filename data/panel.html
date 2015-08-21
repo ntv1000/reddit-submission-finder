@@ -6,11 +6,38 @@
 <style>
     body {
         margin: 0px 0px 8px 0px;
+        height: 100%;
+        font-family: Verdana;
+        overflow: hidden;
     }
     
-    .loginerror {
+    #header {
+        position: absolute;
+        width: 100%;
+        top: 0px;
+        height: 27px;
+    }
+    
+    #links {
+        position: absolute;
+        left: 0;
+        right: -16px;
+        top: 27px;
+        bottom: 40px;
+        overflow-y: scroll;
+    }
+    
+    #footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0px;
+        height: 40px;
+    }
+    
+    #loginerror {
         font-size: 100% !important;
         border-bottom: 1px solid grey;
+        text-align: center;
         padding-bottom: 5px;
         padding-top: 5px;
         background-color: #db4f53;
@@ -28,11 +55,11 @@
     
     .score {
         width: 40px;
-        background-color: #676767;
         border-radius: 3px;
-        font-size: 100% !important;
+        font-size: 70% !important;
+        color: #c6c6c6;
+        font-weight: bold;
         text-align: center;
-        color: white;
         cursor: default;
     }
     
@@ -40,35 +67,37 @@
         position: absolute;
         top: 6px;
         width: 40px;
-        padding-left: 3px;
+        padding-left: 5px;
         padding-right: 3px;
         z-index: 102;
     }
     
-    .subreddit {
+    .infobox {
+        color: #b1b1b7;
         font-size: 80% !important;
-    }
-    
-    .comment {
-        margin-left: auto;
-        margin-right: auto;
-        width: 50%;
-        font-size: 80% !important;
-        float: left;
-        overflow: hidden;
     }
     
     .time {
-        margin-left: auto;
-        margin-right: auto;
-        width: calc(50% - 10px);
-        text-align: right !important;
-        font-size: 80% !important;
+        display: inline;
+        overflow: hidden;
+    }
+    
+    .user {
+        display: inline;
+        color: #2C5885;
+    }
+    
+    .subreddit {
+        display: inline;
+        color: #2C5885;
+    }
+    
+    .comment {
         overflow: hidden;
     }
     
     .title {
-        font-weight: bold;
+        padding-right: 40px;
     }
     
     .rightpanel {
@@ -87,58 +116,14 @@
     }
     
     .contentcontainer:hover {
-        background-color: #efefef;
-    }
-    
-    .maindivider1 {
-        float: left;
-        width: 2px;
-        top: 0;
-        left: 0;
-        bottom: 0;
-        background-color: #15a2d0;
-        position: absolute;
-        margin-left: 47px;
-    }
-    
-    .maindivider2 {
-        float: left;
-        width: 2px;
-        height: 5px;
-        top: 0;
-        left: 0;
-        background-color: white;
-        position: absolute;
-        margin-left: 47px;
-    }
-    
-    .maindivider3 {
-        float: left;
-        width: 2px;
-        height: 5px;
-        left: 0;
-        bottom: 0;
-        background-color: white;
-        position: absolute;
-        margin-left: 47px;
+        background-color: #dedede;
     }
     
     .upvote {
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 0 8px 8px 8px;
-        border-color: transparent transparent #c6c6c6 transparent;
-        margin-bottom: 5px;
         cursor: pointer;
     }
     
     .downvote {
-        width: 0;
-        height: 0;
-        border-style: solid;
-        border-width: 8px 8px 0px 8px;
-        border-color: #c6c6c6 transparent transparent transparent;
         margin-top: 5px;
         cursor: pointer;
     }
@@ -217,17 +202,12 @@
         overflow: visible;
         position: absolute;
         bottom: 0px;
-        height: 18px;
+        height: 40px;
         width: 100%;
-        background-color: white;
         z-index: 100;
         padding: 0px;
         visibility: hidden;
         padding-left: 10px;
-    }
-    
-    .contentcontainer:hover > div.options {
-        background-color: #efefef;
     }
     
     .submission:hover div.options {
@@ -239,52 +219,45 @@
         top: 0;
         bottom: 0px;
         padding-top: 1px;
-        border-style: solid;
-        border-width: 0px 0px 0px 0px;
-        border-color: grey;
-        border-radius: 3px 3px 0px 0px;
-        background-color: #15a2d0;
+        background-color: #cccccc;
         z-index: 101;
-        font-size: 85% !important;
         text-align: center;
         vertical-align: middle;
         color: white;
     }
     
     .currenttab {
-        right: 214px;
-        width: 90px;
+        right: 100px;
+        bottom: 5px;
+        width: 30px;
+        height: 30px;
     }
     
     .foregroundtab {
-        right: 122px;
-        width: 90px;
+        right: 65px;
+        bottom: 5px;
+        width: 30px;
+        height: 30px;
     }
     
     .backgroundtab {
         right: 30px;
-        width: 90px;
+        bottom: 5px;
+        width: 30px;
+        height: 30px;
     }
     
     div.options>div:hover {
         background-color: #0c8cb5;
     }
     
-    #footer {
-        display: none;
-    }
-    
     #submitbutton {
-        margin-left: auto;
-        margin-right: auto;
-        margin-top: 40px;
         padding-top: 15px;
-        width: 50%;
+        width: 100%;
         height: 40px;
-        border: 1px solid grey;
-        border-radius: 5px;
         text-align: center !important;
-        font-size: 140% !important;
+        font-size: 100% !important;
+        background-color: #e3e3e3;
         cursor: pointer;
     }
     
@@ -305,13 +278,18 @@
     }
 </style>
 
-<body style="overflow-y: scroll">
+<body>
     <div>
+        <div id="header">
+            <div id="loginerror">
+                Login on reddit to vote on submissions
+            </div>
+        </div>
         <div id="links">
 
         </div>
         <div id="footer">
-            <div id="submitbutton">Create submission</div>
+            <div id="submitbutton">Submit to reddit</div>
             <div id="reportproblembutton">Submission missing?</div>
         </div>
         <div align="center">
