@@ -174,6 +174,9 @@ function distinctSubmissions(submission_list) {
 }
 
 function getAllURLVersions(url) {
+    if(url.indexOf("about:reader?url=") === 0) {
+        url = decodeURIComponent(url.substring("about:reader?url=".length));
+    }
     var host = url.split("/")[2];
     var result = [];
     if ((host === 'youtube.com' || host === 'www.youtube.com') && url.split("/")[3].indexOf('watch?') === 0) {
