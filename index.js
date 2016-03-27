@@ -224,5 +224,3 @@ function getAllURLVersions(url) {
     }
     return result;
 }
-
-tabs.activeTab.url = "reddit.com";
