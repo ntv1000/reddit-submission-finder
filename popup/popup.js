@@ -54,11 +54,10 @@ function getModhash() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
-                    if (json.hasOwnProperty("data")) {
+                    if (json.hasOwnProperty("data"))
                         resolve(json.data.modhash);
-                    } else {
+                    else 
                         reject("");
-                    }
                 }
                 else {
                     reject("");
@@ -136,6 +135,16 @@ function distinctSubmissions(submission_list) {
         u[submission_list[i].fullname] = 1;
     }
     return a;
+}
+
+function sortSubmissions(submission_list){
+    return submission_list.sort(function(a, b) {
+        if (a.score < b.score) 
+            return 1
+        if (a.score > b.score) 
+            return -1;
+        return 0;
+    });
 }
 
 function getAllURLVersions(url) {
@@ -251,6 +260,7 @@ getModhash()
     .then(active_tab => active_tab.url )
     .then(getAllSubmissions)
     .then(distinctSubmissions)
+    .then(sortSubmissions)
     .then(displaySubmissions);
 
 
