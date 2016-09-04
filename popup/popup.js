@@ -1,4 +1,3 @@
-console.log("test");
 asset_upvote_grey = "../assets/up_grey.png";
 asset_upvote_orange = "../assets/up_orange.png";
 asset_downvote_grey = "../assets/down_grey.png";
@@ -8,8 +7,7 @@ asset_arrow_right = "../assets/arrow_right.png";
 asset_arrow_down = "../assets/arrow_down.png";
 asset_arrow_up = "../assets/arrow_up.png";
 
-modhash = "";
-submissions = [];
+var modhash = "";
 hideOpenOptions = false;
 openLinkDefaultLocation = "foregroundtab" // "currenttab", "foregroundtab", "backgroundtab"
 
@@ -54,7 +52,7 @@ function getModhash() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
-                    if (json.hasOwnProperty("data"))
+                    if (json.data.hasOwnProperty("data"))
                         resolve(json.data.modhash);
                     else 
                         reject("");
@@ -255,7 +253,7 @@ function castVote(fullname, direction) {
 }
 
 getModhash()
-    .then(result => { modhash = result; })
+    .then(result => { modhash = result; }, error => { modhash = ""; })
     .then(getActiveTab)
     .then(active_tab => active_tab.url )
     .then(getAllSubmissions)
