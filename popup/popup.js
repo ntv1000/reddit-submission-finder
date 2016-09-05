@@ -52,7 +52,7 @@ function getModhash() {
             if (xhr.readyState === 4) {
                 if (xhr.status === 200) {
                     var json = JSON.parse(xhr.responseText);
-                    if (json.data.hasOwnProperty("data"))
+                    if (json.data.hasOwnProperty("modhash"))
                         resolve(json.data.modhash);
                     else 
                         reject("");
