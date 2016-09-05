@@ -137,9 +137,9 @@ function distinctSubmissions(submission_list) {
 
 function sortSubmissions(submission_list){
     return submission_list.sort(function(a, b) {
-        if (a.score < b.score) 
+        if (parseInt(a.score) < parseInt(b.score)) 
             return 1
-        if (a.score > b.score) 
+        if (parseInt(a.score) > parseInt(b.score)) 
             return -1;
         return 0;
     });
