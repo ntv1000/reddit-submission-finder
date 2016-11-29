@@ -109,7 +109,7 @@ function handleResponse(jsonData) {
         submission_timestamp = entry.data.created_utc * 1000;
         submissions[i] = {
             fullname: entry.data.name,
-            link: "http://reddit.com" + entry.data.permalink,
+            link: "https://reddit.com" + entry.data.permalink,
             title: entry.data.title,
             score: entry.data.score + "",
             age: (now_timestamp - submission_timestamp),
@@ -170,27 +170,27 @@ function getAllURLVersions(url) {
             youtubeID = youtubeID.substring(1);
         }
 
-        result.push('http://api.reddit.com/search.json?q=' + encodeURIComponent('(url:' + youtubeID + ') (site:youtube.com OR site:youtu.be)'))
+        result.push('https://api.reddit.com/search.json?q=' + encodeURIComponent('(url:' + youtubeID + ') (site:youtube.com OR site:youtu.be)'))
     } else {
         var without_http = "";
         if (url.slice(-1) === "/") {
             url = url.substring(0, url.length - 1);
         }
-        result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url));
-        result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(url + "/"));
+        result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent(url));
+        result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent(url + "/"));
         if (url.indexOf('https') === 0) {
             without_http = url.substring(8);
-            result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
-            result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http + "/"));
+            result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http));
+            result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent(without_http + "/"));
         } else {
             if (url.indexOf('http') === 0) {
                 without_http = url.substring(7);
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
+                result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+                result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
             } else {
                 without_http = url;
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
-                result.push('http://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
+                result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http));
+                result.push('https://www.reddit.com/api/info.json?url=' + encodeURIComponent("https://" + without_http + "/"));
             }
         }
     }
@@ -222,20 +222,20 @@ function displaySubmissions(submissions) {
 
     document.getElementById("submitbutton").onclick = function () {
         getActiveTab().then(active_tab => {
-            openLink("http://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(active_tab.url), "foregroundtab");
+            openLink("https://www.reddit.com/submit?resubmit=true&url=" + encodeURIComponent(active_tab.url), "foregroundtab");
         });
     };
     document.getElementById("reportproblembutton").onclick = function () {
         var username = "ntv1000";
         var subject = "Bug report: submission not found";
         var message = "Page that was searched for: " + current_page + "\n\nMissing submission: [Insert a link to the submission you thing is missing here]\n\nAdditional info: [optional]";
-        var template_url = "http://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(subject) + "&message=" + encodeURIComponent(message);
+        var template_url = "https://www.reddit.com/message/compose/?to=" + encodeURIComponent(username) + "&subject=" + encodeURIComponent(subject) + "&message=" + encodeURIComponent(message);
         openLink(template_url, "foregroundtab");
     };
 }
 
 function castVote(fullname, direction) {
-    var url = "http://www.reddit.com/api/vote?dir=" + direction + "&id=" + fullname;
+    var url = "https://www.reddit.com/api/vote?dir=" + direction + "&id=" + fullname;
 
     voteSubmission(url);
 
