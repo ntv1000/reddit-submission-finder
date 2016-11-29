@@ -24,7 +24,7 @@ body {
     bottom: 40px;
     overflow-y: scroll;
     width: 400px;
-    height: 400px;
+    height: 370px;
 }
 
 #footer {
@@ -273,7 +273,7 @@ div.options>div:hover {
 }
 
 #submitbutton {
-    padding-top: 12px;
+    padding-top: 10px;
     width: 100%;
     height: 40px;
     text-align: center !important;
