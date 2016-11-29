@@ -31,10 +31,9 @@ function openLink(url, where) {
 }
 
 function voteSubmission(url) {
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", url, true);
-    xhr.setRequestHeader("X-Modhash", modhash);
-    xhr.send();
+    var modhashHeader = new Headers();
+    modhashHeader.append("X-Modhash", modhash);
+    fetch(url, {method: "POST", headers: modhashHeader, mode: "cors", credentials: "include"})
 }
 
 function getActiveTab() {
@@ -42,28 +41,6 @@ function getActiveTab() {
         chrome.tabs.query({ currentWindow: true, active: true }, function (tabs) {
             resolve(tabs[0]);
         });
-    });
-}
-
-function getModhash() {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var json = JSON.parse(xhr.responseText);
-                    if (json.data.hasOwnProperty("modhash"))
-                        resolve(json.data.modhash);
-                    else 
-                        reject("");
-                }
-                else {
-                    reject("");
-                }
-            }
-        };
-        xhr.open("GET", "https://www.reddit.com/api/me.json", true);
-        xhr.send();
     });
 }
 
@@ -83,22 +60,14 @@ function getAllSubmissions(url) {
 }
 
 function getURLSubmissions(path) {
-    return new Promise(function (resolve, reject) {
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === 4) {
-                if (xhr.status === 200) {
-                    var result = handleResponse(JSON.parse(xhr.responseText));
-                    resolve(result);
-                }
-                else {
-                    reject();
-                }
-            }
-        };
-        xhr.open("GET", path, true);
-        xhr.send();
-    });
+   return fetch(path, {mode: "cors", credentials: "include"})
+        .then(function(response) {
+            if (response.ok)
+                return response.json();
+            else 
+                return new Promise(function(resolve, reject){reject("");})
+        })
+        .then(result => { return handleResponse(result) }, error => { return []; })
 }
 
 function handleResponse(jsonData) {
@@ -252,8 +221,15 @@ function castVote(fullname, direction) {
     }
 }
 
-getModhash()
-    .then(result => { modhash = result; }, error => { modhash = ""; })
+fetch("https://www.reddit.com/api/me.json", {mode: "cors", credentials: "include"})
+    .then(function(response) {
+        if (response.ok)
+            return response.json();
+    })
+    .then(result => { 
+        if (result.data.hasOwnProperty("modhash"))            
+            modhash = result.data.modhash;
+        })
     .then(getActiveTab)
     .then(active_tab => active_tab.url )
     .then(getAllSubmissions)
